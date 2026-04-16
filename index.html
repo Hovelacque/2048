@@ -109,6 +109,11 @@
                     for (let j = 0; j < this.count; j++)
                         this.board[i][j].draw()
             }
+
+            moveToLeft() {
+                this.board[3][2].value = 32;
+                this.draw()
+            }
         }
 
         class Game {
@@ -120,6 +125,25 @@
                     sizeBoard,
                     4
                 )
+                this.touchStart = null;
+                this.initListeners()
+            }
+
+            initListeners() {
+                canvas.addEventListener('touchstart', (e) => {
+                    e.preventDefault();
+                    if (event.changedTouches.length > 0)
+                        this.touchStart = {
+                            pageX: event.changedTouches[0].pageX,
+                            pageY: event.changedTouches[0].pageY,
+                        }
+                })
+                canvas.addEventListener('touchend', (e) => {
+                    e.preventDefault();
+                    if (event.changedTouches.length > 0 && this.touchStart) {
+                        this.board.moveToLeft()
+                    }
+                })
             }
 
             drawBackground() {
