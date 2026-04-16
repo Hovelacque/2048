@@ -1,0 +1,142 @@
+<html>
+
+<body style="background-color: black;">
+    <canvas></canvas>
+    <script>
+        const canvas = document.querySelector('canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.height = 750;
+        canvas.width = 1024;
+
+        class Piece {
+            constructor(x, y, w, h, value) {
+                this.x = x;
+                this.y = y;
+                this.w = w;
+                this.h = h;
+                this.value = value;
+            }
+
+            draw() {
+                let backColor = '#beac97', color = 'tranparent'
+
+                if (this.value == 2 || this.value == 4)
+                    color = '#756452'
+                else if (this.value > -1)
+                    color = 'white'
+
+                if (this.value == 2)
+                    backColor = '#eee4da'
+                else if (this.value == 4)
+                    backColor = '#ebd8b7'
+                else if (this.value == 8)
+                    backColor = '#f2b177'
+                else if (this.value == 16)
+                    backColor = '#f29360'
+
+                ctx.fillStyle = backColor
+                ctx.beginPath()
+                ctx.roundRect(this.x, this.y, this.w, this.h, 10);
+                ctx.fill()
+
+                ctx.fillStyle = color
+                ctx.font = "28px serif"
+                ctx.textBaseline = "middle";
+                ctx.textAlign = "center";
+                ctx.fillText(this.value,
+                    this.x + (this.w / 2),
+                    this.y + (this.h / 2),
+                    this.w
+                )
+            }
+        }
+
+        class Board {
+            constructor(x, y, size, count) {
+                this.x = x;
+                this.y = y;
+                this.size = size;
+                this.count = count;
+
+                this.board = [];
+                const gap = 5//(this.size * 0.1) / this.count;
+                const pieceSize = ((this.size - (gap * this.count + 1)) / this.count);
+                for (let i = 0; i < this.count; i++) {
+                    const row = []
+                    for (let j = 0; j < this.count; j++) {
+                        const pws = i == this.count - 1 ? pieceSize - gap : pieceSize
+                        const phs = j == this.count - 1 ? pieceSize - gap : pieceSize
+                        row.push(new Piece(
+                            this.x + (i * pieceSize) + ((i + 1) * gap),
+                            this.y + (j * pieceSize) + ((j + 1) * gap),
+                            pws,
+                            phs,
+                            -1
+                        ))
+                    }
+                    this.board.push(row)
+                }
+
+                this.board[0][0].value = 2
+                this.board[0][1].value = 4
+                this.board[0][2].value = 8
+                this.board[0][3].value = 16
+                this.board[1][0].value = 32
+                this.board[1][1].value = 64
+                this.board[1][2].value = 128
+                this.board[1][3].value = 256
+                this.board[2][0].value = 512
+                this.board[2][1].value = 1024
+                this.board[2][2].value = 2048
+                this.board[2][3].value = 4096
+                this.board[3][0].value = 8192
+                this.board[3][1].value = 16384
+            }
+
+            drawBoard() {
+                ctx.fillStyle = '#9c8979'
+                ctx.beginPath()
+                ctx.roundRect(this.x, this.y, this.size, this.size, 10);
+                ctx.fill()
+            }
+
+            draw() {
+                this.drawBoard();
+                for (let i = 0; i < this.count; i++)
+                    for (let j = 0; j < this.count; j++)
+                        this.board[i][j].draw()
+            }
+        }
+
+        class Game {
+            size = 512;
+            constructor() {
+                this.board = new Board(
+                    this.size / 4,
+                    this.size / 4,
+                    this.size / 2,
+                    4
+                )
+            }
+
+            drawBackground() {
+                ctx.fillStyle = 'white'
+                ctx.beginPath()
+                ctx.roundRect(0, 0, this.size, this.size, 10);
+                ctx.fill()
+            }
+
+            draw() {
+                this.drawBackground();
+                this.board.draw()
+            }
+        }
+
+        const game = new Game();
+        game.draw()
+
+    </script>
+</body>
+
+</html>
