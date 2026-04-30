@@ -81,15 +81,22 @@
                 }
 
                 this.createRandomPiece();
+                this.createRandomPiece();
             }
 
             createRandomPiece() {
-                const x = Math.floor(Math.random() * this.count)
-                const y = Math.floor(Math.random() * this.count)
-                if (this.board[x][y].value == -1) {
-                    const value = Math.random() > 0.4 ? 2 : 4
-                    this.board[x][y].value = value;
+                if (this.board.some(row => row.some(p => p.value == -1))) {
+                    const x = Math.floor(Math.random() * this.count)
+                    const y = Math.floor(Math.random() * this.count)
+                    if (this.board[x][y].value == -1) {
+                        const value = Math.random() > 0.4 ? 2 : 4
+                        this.board[x][y].value = value;
+                    }
+                    else
+                        this.createRandomPiece()
                 }
+                else
+                    this.endGame()
             }
 
             drawBoard() {
@@ -133,6 +140,10 @@
             }
             moveToLeft() {
                 console.log('left')
+            }
+
+            endGame() {
+                console.log('End Game !!!')
             }
         }
 
