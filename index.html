@@ -129,21 +129,28 @@
                 this.initListeners()
             }
 
+            touchstart = (event) => {
+                event.preventDefault();
+                const mobile = event?.changedTouches?.length > 0;
+                this.touchStart = {
+                    pageX: mobile ? event.changedTouches[0].pageX : event.pageX,
+                    pageY: mobile ? event.changedTouches[0].pageY : event.pageY,
+                }
+            }
+
+            touchend = (event) => {
+                event.preventDefault();
+                if (this.touchStart) {
+                    this.board.moveToLeft()
+                    this.touchStart = null;
+                }
+            }
+
             initListeners() {
-                canvas.addEventListener('touchstart', (e) => {
-                    e.preventDefault();
-                    if (event.changedTouches.length > 0)
-                        this.touchStart = {
-                            pageX: event.changedTouches[0].pageX,
-                            pageY: event.changedTouches[0].pageY,
-                        }
-                })
-                canvas.addEventListener('touchend', (e) => {
-                    e.preventDefault();
-                    if (event.changedTouches.length > 0 && this.touchStart) {
-                        this.board.moveToLeft()
-                    }
-                })
+                // canvas.addEventListener('touchstart', (e) => console.log(e))
+                // canvas.addEventListener('touchend', (e) => console.log(e))
+                canvas.addEventListener('mousedown', this.touchstart)
+                canvas.addEventListener('mouseup', this.touchend)
             }
 
             drawBackground() {
