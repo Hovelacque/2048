@@ -12,7 +12,7 @@
         class Piece {
 
             style = {
-                '-1': { backColor: '#beac97', color: 'tranparent' },
+                '0': { backColor: '#beac97', color: 'tranparent' },
                 '2': { backColor: '#eee4da', color: '#756452' },
                 '4': { backColor: '#ebd8b7', color: '#756452' },
                 '8': { backColor: '#f2b177', color: 'white' },
@@ -74,7 +74,7 @@
                             this.x + (gap * (i + 1)) + (pieceSize * i),
                             this.y + (gap * (j + 1)) + (pieceSize * j),
                             pieceSize,
-                            -1
+                            0
                         ));
                     }
                     this.board.push(row)
@@ -82,13 +82,17 @@
 
                 this.createRandomPiece();
                 this.createRandomPiece();
+                this.createRandomPiece();
+                this.createRandomPiece();
+                this.createRandomPiece();
+                this.createRandomPiece();
             }
 
             createRandomPiece() {
-                if (this.board.some(row => row.some(p => p.value == -1))) {
+                if (this.board.some(row => row.some(p => p.value == 0))) {
                     const x = Math.floor(Math.random() * this.count)
                     const y = Math.floor(Math.random() * this.count)
-                    if (this.board[x][y].value == -1) {
+                    if (this.board[x][y].value == 0) {
                         const value = Math.random() > 0.4 ? 2 : 4
                         this.board[x][y].value = value;
                     }
@@ -129,6 +133,24 @@
                 }
             }
 
+            sumArray(direction, pos) {
+                let row = direction == 'r' ? pos : 0;
+                let column = direction == 'c' ? pos : 0;
+                const newArray = [];
+
+                for (let i = 0; i < this.count; i++) {
+                    const piece = this.board[column][row];
+                    if (piece.value > 0)
+                        newArray.push(piece.value);
+
+                    if (direction == 'r')
+                        column++;
+                    else
+                        row++;
+                }
+                return newArray;
+            }
+
             moveToUp() {
                 console.log('up')
             }
@@ -138,8 +160,14 @@
             moveToDown() {
                 console.log('down')
             }
+
             moveToLeft() {
-                console.log('left')
+                for (let i = 0; i < this.count; i++) {
+                    const a = this.sumArray('c', i);
+                    const x = a;
+                }
+
+                this.draw();
             }
 
             endGame() {
