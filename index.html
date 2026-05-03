@@ -71,8 +71,8 @@
                     const row = []
                     for (let j = 0; j < this.count; j++) {
                         row.push(new Piece(
-                            this.x + (gap * (i + 1)) + (pieceSize * i),
-                            this.y + (gap * (j + 1)) + (pieceSize * j),
+                            this.x + (gap * (j + 1)) + (pieceSize * j),
+                            this.y + (gap * (i + 1)) + (pieceSize * i),
                             pieceSize,
                             0
                         ));
@@ -133,23 +133,23 @@
                 }
             }
 
-            sumArray(direction, pos) {
-                let row = direction == 'r' ? pos : 0;
-                let column = direction == 'c' ? pos : 0;
-                const newArray = [];
+            // sumArray(direction, pos) {
+            //     let row = direction == 'r' ? pos : 0;
+            //     let column = direction == 'c' ? pos : 0;
+            //     const newArray = [];
 
-                for (let i = 0; i < this.count; i++) {
-                    const piece = this.board[column][row];
-                    if (piece.value > 0)
-                        newArray.push(piece.value);
+            //     for (let i = 0; i < this.count; i++) {
+            //         const piece = this.board[column][row];
+            //         if (piece.value > 0)
+            //             newArray.push(piece.value);
 
-                    if (direction == 'r')
-                        column++;
-                    else
-                        row++;
-                }
-                return newArray;
-            }
+            //         if (direction == 'r')
+            //             column++;
+            //         else
+            //             row++;
+            //     }
+            //     return newArray;
+            // }
 
             moveToUp() {
                 console.log('up')
@@ -162,10 +162,24 @@
             }
 
             moveToLeft() {
-                for (let i = 0; i < this.count; i++) {
-                    const a = this.sumArray('c', i);
-                    const x = a;
+                const newMatrix = [];
+                for (let i = 0; i < this.board.length; i++) {
+                    const row = this.board[i];
+                    const newArray = [];
+                    for (let j = 0; j < row.length; j++) {
+                        const piece = row[j];
+                        if (piece.value > 0)
+                            newArray.push(piece.value);
+                    }
+                    newMatrix.push(newArray);
                 }
+
+                const a = newMatrix
+                
+                // for (let i = 0; i < this.count; i++) {
+                //     const a = this.sumArray('c', i);
+                //     const x = a;
+                // }
 
                 this.draw();
             }
